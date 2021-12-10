@@ -13,7 +13,7 @@ Graph Neural Networks (GNNs) have achieved great success in modelling complex re
 However, GNNs often struggle with efficiently propagating information over long distances on graphs. They have empirically been shown to exhibit a significant drop in performance beyond just 3-4 layers. This is a significant issue as there are many real-world graph learning tasks that depend on long-range signals. For instance, the prediction of a molecule's properties may require compiling information from atoms on opposite ends [1].
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/molecule.png" alt="molecule" width="300"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/molecule.png" alt="molecule" width="300"/>
 </p>
 
 <!-- While this issue has previously been attributed to the problem of _over-smoothing_, where node representations converge to become indistinguishable [1], a recent work has identified a new possible explanation: information _over-squashing_ [2].  -->
@@ -39,7 +39,7 @@ For example, in the diagram below, information from node A and other nodes along
 
 <!-- ![Over-squashing]({{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/bottleneck.png) -->
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/bottleneck.png" alt="bottleneck" width="700"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/bottleneck.png" alt="bottleneck" width="700"/>
 </p>
 
 We've seen the intuition behind over-squashing, but how prominent is the issue in practice?
@@ -52,14 +52,14 @@ The paper first studies over-squashing through a controlled experiment on a syne
 To compare the effects of over-squashing in several GNN variants, the authors contrived a graph learning task called the _NeighborsMatch problem_. The NeighborsMatch graph consists of two main types of nodes: green and blue. Green nodes have alphabetical labels and a varying number of blue neighbors. There is also one green target node. The objective is to predict the label of the green node which has the same number of blue neighbors as the target.
 
 <!-- <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/neighborsmatch.png" alt="neighborsmatch" width="700"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/neighborsmatch.png" alt="neighborsmatch" width="700"/>
 </p>
 
 Consider the above example from the paper. The green nodes are labeled A, B, and C, and the target node is labeled '?'. In this case, the correct prediction is 'C' because node C has the same number of blue neighbors as '?'. -->
 The experiments were run using a special instance of the NeighborsMatch problem known as _Tree-NeighborsMatch_. 
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/tree_neighborsmatch.png" alt="tree neighborsmatch" width="700"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/tree_neighborsmatch.png" alt="tree neighborsmatch" width="700"/>
 </p>
 
 Consider the above example from the paper. The green nodes are labeled A-H, and the target node is labeled '?'. The grey nodes in the middle are arranged in the form of a binary tree of depth $ d=3 $. In this example, the correct prediction is 'C' because node C has the same number of blue neighbors as '?'. 
@@ -76,7 +76,7 @@ Using this task for the experiments, the paper analyzes the effects of increasin
 As shown in the plot below, **the impact of over-squashing depends on the architecture of the GNN**. 
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/accuracies.png" alt="accuracies" width="550" /> 
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/accuracies.png" alt="accuracies" width="550" /> 
 </p>
 
 The key difference lies in the way each GNN aggregates the representations of neighboring nodes. For instance, GCNs and GINs squash all of the information being propagated from the leaves into a single vector before combining it with a target node's representation. These architectures were only able to achieve 100% train accuracy up to a problem radius of 3.
@@ -84,7 +84,7 @@ The key difference lies in the way each GNN aggregates the representations of ne
 On the other hand, architectures like GAT use attention-based weighting of the incoming messages. This means that at each node in the binary tree, it can filter out the information incoming from the branch that contains irrelevant information. 
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/filtered.png" alt="filtered" width="700"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/filtered.png" alt="filtered" width="700"/>
 </p>
 
 The amount of information that needs to squashed is _halved_ in this case, so we see better results with respect to GCN and GIN at a radius $ r $ that is larger by 1.
@@ -96,7 +96,7 @@ The authors also hypothesize that GGNNs perform very well because the Gated Recu
 Over-squashing was present in the Tree-NeighborsMath problem by design. How prominent is the issue for real-world GNN models? To measure the phenomenon, Alon and Yahav used the technique of modifying the last layer in several existing models to instead be a _fully-adjacent layer (FA)_, where each node is connected to every other node. 
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/fa_layer.png" alt="fa layer" width="800"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/fa_layer.png" alt="fa layer" width="800"/>
 </p>
 
 If there are $ K $ layers, only the first $ K-1 $ would be aware of the graph's topology. This means that the first $ K-1 $ layers would no longer have to optimize for preserving long-range information, as this information would instead be passed along during the FA layer. The last layer would allow every node to directly communicate with one another and reduce the effect of the information bottleneck. 
@@ -113,7 +113,7 @@ But what if over-squashing is only part of the problem? Could there be other exp
 Over-smoothing is the related problem in which interacting nodes converge to indistinguishable representations as the number of GNN layers increases. This is a result of information between two nodes being combined and passed along back and forth over many iterations. An example is demonstrated below, where the mixing of colors represents the smoothing of node representations.
 
 <p align="center">
-    <img src="{{ site.url }}/public/images/2021-12-09-oversquashing-in-gnns/oversmoothing.png" alt="oversmoothing" width="800"/>
+    <img src="../public/images/2021-12-09-oversquashing-in-gnns/oversmoothing.png" alt="oversmoothing" width="800"/>
 </p>
 
 Over-smoothing intuitively seems very similar to over-squashing, and it is in fact the long-standing explanation for the poor performance of GNNs as the number of layers increases. However, the two phenomena are distinct. **Over-smoothing occurs when the number of layers is much greater than the problem radius no matter how small the latter is**. In the above example, the problem radius is 1 since the graph is fully connected, and the node representations already become difficult to distinguish by layer 3. However, information is not being condensed over long distances, so there is no over-squashing.
