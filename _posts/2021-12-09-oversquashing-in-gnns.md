@@ -20,12 +20,12 @@ However, GNNs often struggle with efficiently propagating information over long 
 
 The recent paper "On the Bottleneck of Graph Neural Networks and its Practical Implications" by Uri Alon and Eran Yahav identifies a new explanation for the inefficient flow of information between distant nodes, called _over-squashing_ [2]. This blog post will discuss the phenomenon of over-squashing as defined in the paper, its relation to other measures of information loss in GNNs, and some proposed solutions.
 
-1. [What is over-squashing?](#oversquashing)
-2. [Over-squashing in practice](#evaluation)
-    * [A synthetic experiment](#synthetic_experiment)
-    * [Existing models](#existing_models)
-3. [Over-squashing vs. over-smoothing](#oversquashing_vs_oversmoothing)
-4. [How can we squash the problem?](#squashing_the_problem)
+1. [What is over-squashing?](#what-is-over-squashing)
+2. [Over-squashing in practice](#over-squashing-in-practice)
+    * [A synthetic benchmark](#a-synthetic-benchmark)
+    * [Existing models](#existing-models)
+3. [Over-squashing vs. over-smoothing](#over-squashing-vs-over-smoothing)
+4. [How can we squash the problem?](#how-can-we-squash-the-problem)
 6. [Conclusion](#conclusion)
 5. [References](#references) 
 
